@@ -1,0 +1,225 @@
+/* You can add global styles to this file, and also import other style files */
+:root {
+  --color-brand--1: #ffb545;
+  --color-brand--2: #00c46a;
+
+  --color-dark--1: #2d3439;
+  --color-dark--2: #42484d;
+  --color-light--1: #aaa;
+  --color-light--2: #ececec;
+  --color-light--3: rgb(214, 222, 224);
+}
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: sans-serif;
+}
+
+.map-container {
+  position: relative;
+  /* width: calc(100% - 60px); */
+  /* height: calc(100% - 60px); */
+  /* margin: 30px; */
+  /* flex: 1; */
+  /* width: 100%; */
+  height: calc(100vh - 30px);
+  display: flex;
+  /* padding: 15px; */
+  margin: 15px; /* Navbar space*/
+}
+
+/* .map-frame {
+  border: 2px solid black;
+  height: 100%;
+} */
+
+#map {
+  height: 100%;
+  flex: 1;
+  border-radius: 1%;
+}
+
+/* ToDo List  */
+.todo-list {
+  /* flex-basis: 20rem;
+  text-align: center;
+  padding: 20px; */
+  flex-basis: 17rem;
+  /* text-align: center; */
+  padding: 20px;
+  background-color: var(--color-dark--1);
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.todo-list .logo {
+  max-width: 40px;
+  align-self: center;
+}
+
+.todo-list .logo + h2 {
+  align-self: center;
+}
+
+/* => List Start */
+.todo-list ul {
+  list-style: none;
+  height: 77vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  /* border: 1px solid red; */
+  padding: 0;
+  margin: 0;
+}
+.todo-list ul::-webkit-scrollbar {
+  width: 0;
+}
+
+/* form */
+form {
+  position: relative;
+  border-radius: 5px;
+
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+  background-color: var(--color-dark--2);
+}
+
+form .date-form {
+  display: flex;
+  justify-content: space-evenly;
+  margin-bottom: 10px;
+}
+
+.date-form .date-entry {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+}
+
+.date-form .date-entry .form-control {
+  padding: 0 2px;
+  width: 40px;
+  height: 25px;
+  text-align: center;
+}
+
+form .title-form {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+}
+
+#desc {
+  width: 14rem;
+}
+
+form .close-form-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 15px;
+  height: 15px;
+  font-size: 13px;
+  line-height: 15px;
+  cursor: pointer;
+  color: white;
+  background-color: #aaa;
+  border-radius: 2px;
+  text-align: center;
+}
+
+form .close-form-btn:hover {
+  color: #b9b9b9;
+}
+
+.btn {
+  padding: 2px;
+  margin: 3px 0;
+}
+
+ul .appointment {
+  background-color: rgb(83, 83, 83);
+  border-radius: 5px;
+  padding: 1.5rem 2.25rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 0.75rem 1.5rem;
+  position: relative;
+  border-left: 5px solid var(--color-brand--2);
+}
+
+.appointment h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.delete {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: rgba(227, 54, 51, 0.887);
+  text-align: center;
+  padding: 0px 5px;
+  font-weight: 900;
+  font-size: 14px;
+  border-radius: 4px;
+}
+/* => List end */
+
+.list-activator {
+  border: 3px solid #9b9b9b;
+  position: absolute;
+  padding: 5px 9px;
+  border-radius: 7px;
+  color: var(--bs-gray);
+  right: 7px;
+  display: none;
+  top: 6px;
+  background-color: #c7c7c7;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  #map {
+  }
+  .map-container {
+  }
+  .list-activator {
+    display: block;
+    z-index: 1000;
+  }
+  .todo-list {
+    background-color: transparent;
+    position: absolute;
+    z-index: 999;
+    right: -15px;
+    width: 270px;
+    top: 0px;
+  }
+  .todo-list > img,
+  .todo-list > h2 {
+    display: none;
+  }
+
+  .todo-list ul {
+    max-height: 71vh;
+    height: auto;
+  }
+
+  .todo-list form {
+  }
+}
