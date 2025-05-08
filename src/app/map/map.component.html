@@ -5,9 +5,8 @@
 
   <div class="todo-list">
     <img class="logo" src="../../assets/images/map-logo.png" alt="logo" />
-    <h2>Mabify</h2>
+    <h2>Mapify</h2>
 
-    <!-- <div *ngIf="schedule.length > 0"> -->
     <div>
       <ul>
         <form
@@ -52,10 +51,57 @@
               id="desc"
               type="text"
             />
-            <button type="submit" class="btn btn-light">submit</button>
+            <button
+              [disabled]="todoForm.invalid"
+              type="submit"
+              class="btn btn-light"
+            >
+              submit
+            </button>
           </div>
           <div (click)="hideForm()" class="close-form-btn">x</div>
         </form>
+
+        <div class="validators">
+          <div
+            class="bg-danger day"
+            *ngIf="todoForm.get('day')?.errors && todoForm.get('day')?.touched"
+          >
+            <p *ngIf="todoForm.get('day')?.errors">
+              A valid day from 1 to 31 is required
+            </p>
+          </div>
+
+          <div
+            class="bg-danger month"
+            *ngIf="
+              todoForm.get('month')?.errors && todoForm.get('month')?.touched
+            "
+          >
+            <p *ngIf="todoForm.get('month')?.errors">
+              A valid month from 1 to 12 is required
+            </p>
+          </div>
+
+          <div
+            class="bg-danger year"
+            *ngIf="
+              todoForm.get('year')?.errors && todoForm.get('year')?.touched
+            "
+          >
+            <p *ngIf="todoForm.get('year')?.errors">Valid year is required</p>
+          </div>
+
+          <div
+            class="bg-danger title title"
+            *ngIf="
+              todoForm.get('title')?.errors && todoForm.get('title')?.touched
+            "
+          >
+            <p *ngIf="todoForm.get('title')?.errors">Title is required</p>
+          </div>
+        </div>
+
         <li
           *ngFor="let appointment of schedule"
           (click)="moveToPopup(appointment)"
@@ -63,15 +109,6 @@
         >
           <h2>{{ appointment.title }}</h2>
           <div (click)="delete($event, appointment)" class="delete">X</div>
-        </li>
-
-        <li class="appointment">
-          <h2>grocery</h2>
-          <div class="delete">X</div>
-        </li>
-        <li class="appointment">
-          <h2>gym</h2>
-          <div class="delete">X</div>
         </li>
       </ul>
     </div>

@@ -5,9 +5,6 @@
 
   --color-dark--1: #2d3439;
   --color-dark--2: #42484d;
-  --color-light--1: #aaa;
-  --color-light--2: #ececec;
-  --color-light--3: rgb(214, 222, 224);
 }
 * {
   box-sizing: border-box;
@@ -21,21 +18,12 @@ body {
 
 .map-container {
   position: relative;
-  /* width: calc(100% - 60px); */
-  /* height: calc(100% - 60px); */
-  /* margin: 30px; */
-  /* flex: 1; */
-  /* width: 100%; */
   height: calc(100vh - 30px);
   display: flex;
-  /* padding: 15px; */
   margin: 15px; /* Navbar space*/
 }
 
-/* .map-frame {
-  border: 2px solid black;
-  height: 100%;
-} */
+/* Start Map */
 
 #map {
   height: 100%;
@@ -43,13 +31,24 @@ body {
   border-radius: 1%;
 }
 
+#map p {
+  margin: 0;
+}
+
+/* .clicked-popup {
+}
+
+.leaflet-popup-content-wrapper {
+}
+
+.leaflet-popup-content {
+} */
+
+/* End Map */
+
 /* ToDo List  */
 .todo-list {
-  /* flex-basis: 20rem;
-  text-align: center;
-  padding: 20px; */
   flex-basis: 17rem;
-  /* text-align: center; */
   padding: 20px;
   background-color: var(--color-dark--1);
   color: white;
@@ -72,9 +71,9 @@ body {
   height: 77vh;
   overflow-y: scroll;
   overflow-x: hidden;
-  /* border: 1px solid red; */
   padding: 0;
   margin: 0;
+  position: relative;
 }
 .todo-list ul::-webkit-scrollbar {
   width: 0;
@@ -101,7 +100,6 @@ form .date-form {
   flex: 1;
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
   align-items: center;
 }
 
@@ -115,8 +113,11 @@ form .date-form {
 form .title-form {
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
   align-items: center;
+}
+
+#year {
+  width: 3rem;
 }
 
 #desc {
@@ -136,6 +137,18 @@ form .close-form-btn {
   background-color: #aaa;
   border-radius: 2px;
   text-align: center;
+}
+
+/* ul .validators {
+} */
+
+ul .bg-danger {
+  background-color: #f16767 !important;
+  margin: 0;
+  color: #ffffff;
+  padding: 2px 10px 0;
+  border-radius: 6px;
+  font-size: 13px;
 }
 
 form .close-form-btn:hover {
@@ -194,10 +207,10 @@ ul .appointment {
 }
 
 @media (max-width: 768px) {
-  #map {
+  /* #map {
   }
   .map-container {
-  }
+  } */
   .list-activator {
     display: block;
     z-index: 1000;
@@ -208,7 +221,8 @@ ul .appointment {
     z-index: 999;
     right: -15px;
     width: 270px;
-    top: 0px;
+    top: 5px;
+    padding: 0px 20px;
   }
   .todo-list > img,
   .todo-list > h2 {
@@ -219,7 +233,7 @@ ul .appointment {
     max-height: 71vh;
     height: auto;
   }
-
+  /* 
   .todo-list form {
-  }
+  } */
 }

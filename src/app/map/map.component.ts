@@ -1,5 +1,10 @@
-import { Component, AfterViewInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Component, AfterViewInit, OnInit } from '@angular/core';
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  ValueChangeEvent,
+} from '@angular/forms';
 import * as L from 'leaflet';
 
 // Set default Icon Image marker
@@ -24,7 +29,7 @@ L.Marker.prototype.options.icon = iconDefault;
   templateUrl: './map.component.html',
   styleUrl: './map.component.css',
 })
-export class MapComponent implements AfterViewInit {
+export class MapComponent implements AfterViewInit, OnInit {
   map: any;
   mapEvent: any;
   schedule: any[] = [];
@@ -34,9 +39,17 @@ export class MapComponent implements AfterViewInit {
 
   // Form Group
   todoForm = new FormGroup({
-    day: new FormControl(null, [Validators.required]),
-    month: new FormControl(null, [Validators.required]),
-    year: new FormControl(null, [Validators.required]),
+    day: new FormControl(null, [
+      Validators.required,
+      Validators.min(1),
+      Validators.max(31),
+    ]),
+    month: new FormControl(null, [
+      Validators.required,
+      Validators.min(1),
+      Validators.max(12),
+    ]),
+    year: new FormControl(null, [Validators.required, Validators.min(2025)]),
     title: new FormControl(null, [Validators.required]),
   });
 
@@ -44,9 +57,11 @@ export class MapComponent implements AfterViewInit {
     if (navigator.geolocation) {
       //==> getCurrentPosition(callbackfunc(position))
       navigator.geolocation.getCurrentPosition(this.initMap.bind(this), () =>
-        console.log(`couldn't fetch position`)
+        alert(`couldn't fetch position`)
       );
-    } else alert("this browser doesn't have geolocation API");
+    } else {
+      alert("this browser doesn't have geolocation API");
+    }
   }
 
   initMap(position: any): void {
@@ -54,10 +69,10 @@ export class MapComponent implements AfterViewInit {
     this.currentPosition = position;
     const { latitude, longitude } = position.coords;
     this.map = L.map('map', {
-      center: [53.5939, 9.9724],
-      zoom: 17,
+      // center: [53.5939, 9.9724]
+      center: [latitude, longitude],
+      zoom: 16,
     });
-
     // Create map tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
@@ -67,17 +82,25 @@ export class MapComponent implements AfterViewInit {
     }).addTo(this.map);
 
     // Add circular marker
-    L.circleMarker([53.5939, 9.9724], {
+    L.circleMarker([latitude, longitude], {
       radius: 10,
       fillOpacity: 0.9,
     })
       .addTo(this.map)
-      .bindPopup('your are here')
+      .bindPopup('your are here', { className: `clicked-popup` })
       .openPopup();
 
     // Adding a click handler
-    // this.map.on('click', this._callClickedmarker.bind(this));
     this.map.on('click', this.showForm.bind(this));
+
+    // Rendering local storage schedule on map
+    this.schedule.forEach((el) => {
+      this.addMarker(el);
+    });
+
+    // move to current position
+    const myPosition = { coords: [latitude, longitude] };
+    this.moveToPopup(myPosition);
   }
 
   showForm(mapE: any) {
@@ -93,19 +116,27 @@ export class MapComponent implements AfterViewInit {
     todo.id = id;
     todo.coords = [lat, lng];
 
-    // add todod map marker
+    // add todo map marker
     this.addMarker(todo);
 
     // add todo object to schedule array
     this.schedule.push(todo);
-    console.log('schedule is working', this.schedule);
-
-    // render schedule on list view
 
     // hide form + clear inputs field
     this.hideForm();
 
     // save schedule in local storage
+    this.saveLocalStorage();
+  }
+
+  saveLocalStorage() {
+    localStorage.setItem('schedule', JSON.stringify(this.schedule));
+  }
+
+  getLocalStorage() {
+    const data = JSON.parse(localStorage.getItem('schedule') || '[]');
+    if (data.length == 0) return;
+    this.schedule = data;
   }
 
   hideForm() {
@@ -114,20 +145,24 @@ export class MapComponent implements AfterViewInit {
   }
 
   addMarker(todo: any) {
-    const marker = L.marker(todo.coords).bindPopup(`${todo.title}`, {
-      // minWidth: 100,
-      maxWidth: 250,
-      autoClose: false,
-      closeOnClick: false,
-      className: `clicked-popup`,
-    });
+    const marker = L.marker(todo.coords).bindPopup(
+      `<p>${todo.title} on </p>  <p>${todo.day}/${todo.month}/${todo.year}</p>`,
+      {
+        // minWidth: 100,
+        maxWidth: 250,
+        autoClose: false,
+        closeOnClick: false,
+        className: `clicked-popup`,
+      }
+    );
     marker.addTo(this.map).openPopup();
+
     // add to markers array
     this.markers[todo.id] = marker;
   }
 
   moveToPopup(todo: any) {
-    this.map.setView(todo.coords, 17, {
+    this.map.setView(todo.coords, 16, {
       animate: true,
       pan: { duration: 1.5 },
     });
@@ -144,57 +179,16 @@ export class MapComponent implements AfterViewInit {
     const itemToDelete = this.schedule.find((el) => el.id === id);
     const index = this.schedule.indexOf(itemToDelete);
     if (index > -1) {
-      // only splice array when item is found
-      this.schedule.splice(index, 1); // 2nd parameter means remove one item only
+      this.schedule.splice(index, 1);
+      this.saveLocalStorage();
     }
+  }
+
+  ngOnInit(): void {
+    this.getLocalStorage();
   }
 
   ngAfterViewInit(): void {
     this.getPosition();
   }
 }
-
-// test() {
-//   this.formView = !this.formView;
-//   console.log('formview', this.formView);
-// }
-
-// _currentPositionMarker(map: L.Map) {
-//   // Add circular marker
-//   L.circleMarker([53.5939, 9.9724], {
-//     radius: 10,
-//     fillOpacity: 0.9,
-//   })
-//     .addTo(map)
-//     .bindPopup('your are here')
-//     .openPopup();
-// }
-
-// _addMarker(map: L.Map) {
-//   L.marker([53.5954, 9.9687])
-//     .addTo(map)
-//     .bindPopup(`clicked here`, {
-//       minWidth: 100,
-//       maxWidth: 250,
-//       autoClose: false,
-//       closeOnClick: false,
-//       className: `clicked-popup`,
-//     })
-//     .openPopup();
-// }
-
-// _addClickedMarker(mapEvent: any, map: L.Map) {
-//   // adding a marker on map
-//   const { lat, lng } = mapEvent.latlng;
-//   console.log(lat, lng);
-//   L.marker([lat, lng])
-//     .addTo(map)
-//     .bindPopup(`clicked here`, {
-//       minWidth: 100,
-//       maxWidth: 250,
-//       autoClose: false,
-//       closeOnClick: false,
-//       className: `clicked-popup`,
-//     })
-//     .openPopup();
-// }
