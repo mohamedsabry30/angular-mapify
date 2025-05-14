@@ -17,11 +17,15 @@ You can check out the live version here:
 
 ### Home Page
 
-![App Screenshot](https://raw.githubusercontent.com/mohamedsabry30/angular-mapify/main/screenshots/homepage.png)
+![App Screenshot](https://raw.githubusercontent.com/mohamedsabry30/angular-mapify/main/screenshots/regular.png)
+
+### Reactive form
+
+![App Screenshot](https://raw.githubusercontent.com/mohamedsabry30/angular-mapify/main/screenshots/validator.png)
 
 ### Responsive View
 
-![App Screenshot](https://raw.githubusercontent.com/mohamedsabry30/angular-mapify/main/screenshots/respnhnew.png)
+![App Screenshot](https://raw.githubusercontent.com/mohamedsabry30/angular-mapify/main/screenshots/responsive.png)
 
 ## About Me
 
